@@ -187,13 +187,13 @@ void Vallox::setHeatingModeOff() {
 }
 
 boolean Vallox::setStatusVariable(byte variable, byte value) {
+    // Clear the retry loop to prevent retry loops to break in before getting reply
+    lastRetryLoop = millis();
   if (!statusMutex) {
     statusMutex = true; // lock sending status again
     // Status is only allowed to send to specific mainboard
     setVariable(variable, value, VX_MSG_MAINBOARD_1);
 
-    // Clear the retry loop to prevent retry loops to break in before getting reply
-    lastRetryLoop = millis();
     return true;
   }
 
